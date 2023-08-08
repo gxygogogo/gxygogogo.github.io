@@ -3708,7 +3708,7 @@ h1.page-title + .tag-cloud-list {
   transition: 0.3s;
 }
 #loading-box .loading-img {
-  background: url("/img/loading.jpg") no-repeat center center;
+  background: url("/img/touxiang.jpg") no-repeat center center;
   background_size: cover;
   width: 100px;
   height: 100px;
