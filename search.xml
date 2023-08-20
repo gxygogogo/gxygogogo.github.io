@@ -25,8 +25,49 @@
   <entry>
     <title>The 3D genomics</title>
     <url>/2023/08/08/The-3D-genomics/</url>
-    <content><![CDATA[<h2 id="简述">简述</h2>
-<p><img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/20230808143822.gif" alt="-w50"></p>
+    <content><![CDATA[<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .image-text-container {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* 调整图片和文本之间的间距 */
+  }
+  .image-container {
+    flex: 1;
+  }
+  .text-container {
+    flex: 2;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+</head>
+<body>
+<h1>简述</h1>
+<div class="image-text-container">
+  <div class="image-container">
+    <img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/20230808143822.gif" alt="Image">
+  </div>
+  <div class="text-container">
+    <p>
+      基因组是细胞中功能最为重要的部分，基因组的内容被组织成一种紧凑的三维结构。基因组包含数百万个核苷酸碱基，按照其适当的框架进行组织。基因组测序和先进的显微镜技术的迅速发展，使我们能够理解基因组的三维空间组织。利用连接法的染色体捕获方法以及三维基因组浏览器的可视化工具，已经促进了对基因组的详细探索。
+    </p>
+  </div>
+</div>
+<h1>真核生物染色质结构</h1>
+<div>
+  这是真核生物的染色质结构<sup>1</sup>
+  <img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/chromatin.png" alt="真核生物染色质结构">
+</div>
+<h2 id="参考">参考</h2>
+<div id="ref-anchor-1"></div>
+-[1][Chromatin plasticity: A versatile landscape that underlies cell fate and identity](https://www.science.org/doi/10.1126/science.aat8950)
+</body>
+</html>
 ]]></content>
       <categories>
         <category>Background knowledge</category>
