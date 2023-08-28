@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2023/08/07/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start">Quick Start</h2>
-<h3 id="Create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-      <tags>
-        <tag>Hello world</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>The 3D genomics</title>
     <url>/2023/08/08/The-3D-genomics/</url>
     <content><![CDATA[<!DOCTYPE html>
@@ -65,6 +43,24 @@
 <div>
   这是真核生物的染色质结构<sup class="blue">1</sup>
   <img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/chromatin.png" alt="真核生物染色质结构">
+  <p>
+    在这幅图中染色质在捡起细胞核内的层级组织以及在每个层级中起作用的因子被清晰地展现出来。从<b>一级结构</b>开始，这一层面能够检测到碱基序列地排布，也就是我们通常进行的基因组测序信息的分析，在这些序列上会有一些甲基化的修饰，这些修饰可以通过BS-seq检测。DNA缠绕在组蛋白八聚体上形成核小体，在核小体上存在一系列表观修饰，例如H3K27me3和H3K27ac等，这些组蛋白修饰可以通过ChIP-seq和CUT&Tag等技术进行检测。核小体在染色质上分布分区域有致密区域也有疏松区域，疏松区域存在大量裸露片段，在这些片段区域发生转录的生物学过程，这就是染色质开放区域，这写区域可以通过ATAC-seq技术进行检测。染色质进而缠绕折叠成三维的高级结构，这些层次结构就组成了细胞核内的静态画面，研究染色质结构与基因组功能间关系的一系列技术就是<b>三维基因组学</b>。
+  </p>  
+</div>
+<h2 id="三维基因组学的相关概念">三维基因组学的相关概念</h2>
+<div>
+  <p>
+    <b>三维基因组学：</b>三维基因组学旨在考虑基因组序列、基因结构、调控元件的同时，对基因组序列在细胞核内的三维空间结果，及其在基因转录、调控、复制和修复等生物过程中的功能进行研究。
+  </p>
+</div>
+<h3 id="细胞核-Nucleus">细胞核(Nucleus)</h3>
+<div>
+  <p>
+    细胞核是染色质的主要存储容器，有三个与三维基因组密切相关的结构：<br>
+    <b>核膜(Nuclear Envelope): </b>用来包裹染色质，控制物质进出。<br>
+    <b>核纤层(Nuclear Lamina): </b>位于核膜的内表面的纤维网络，支持核膜，锚定染色质，与核骨架相连，参与细胞周期解离和重建。<br>
+    <b>核仁(Nucleolus): </b>主要存储合成rRNA，存储装配核糖体。
+  </p>
 </div>
 <h2 id="参考">参考</h2>
 <div id="ref-anchor-1"></div>
@@ -77,6 +73,28 @@
       </categories>
       <tags>
         <tag>Biology</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2023/08/07/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start">Quick Start</h2>
+<h3 id="Create-a-new-post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <tags>
+        <tag>Hello world</tag>
       </tags>
   </entry>
 </search>
