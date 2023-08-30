@@ -1,6 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Learning the histone codes with large genomic windows and three-dimensional chromatin interactions using transformer</title>
+    <url>/2023/08/30/Learning-the-histone-codes-with-large-genomic-windows-and-three-dimensional-chromatin-interactions-using-transformer/</url>
+    <content><![CDATA[<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .image-text-container {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* 调整图片和文本之间的间距 */
+  }
+  .image-container {
+    flex: 1;
+  }
+  .text-container {
+    flex: 2;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  .blue{
+    color: #7EBCF2;
+  }
+</style>
+</head>
+<body>
+<h2 id="Chromoformer简介">Chromoformer简介</h2>
+<div>
+<p>
+Chromoformer是基于transformer的深度学习框架，用于预测基因表达水平，其目标是在启动子附近的广泛基因组区域以及远程调控元素上的组蛋白修饰的基础上进行预测。
+</p>
+<p>
+传统方法中，大多数研究采用预测模型，利用HMs在启动子附近的水平来预测相应的基因表达水平。然而，最近的研究表明，深度学习模型在这方面相对传统机器学习模型表现更好。
+</p>
+<p>
+Chromoformer的出现克服了之前方法的局限性：一方面：之前的深度学习模型收到了模型架构(如卷积神经网络和循环神经网络)的限制，难以准确地建模长序列内的依赖性。另一方面：这些模型没有考虑由三维染色质折叠介导的远程调控，尽管这种物理相互作用在基因表达调控中扮演重要角色。
+</p>
+<p>
+<b>Chromoformer的创新之处体现在以下两个方面：</b><br>
+<li><b>Transformer的应用：</b>Chromoformer采用了tarnsformer架构，这种架构最初是危了自然语言处理而设计的。这个架构的两个主要功能在处理Chromoformer面临的两个挑战上表现出了巨大的潜力。首先，transformer能够精确地建模序列数据中的长距离依赖性。它通过<b>为输入序列添加位置编码</b>来实现这一点，这些带有位置信息的输入特征被独立处理，并传入后续的自注意模块，该模块计算输入特征之间的全部两两依赖关系。因此，可以捕捉到长距离依赖性，而不会受到这对特征之间的其他特征的干扰。其次，transformer也可以用于建模实体的无序集合以及它们之间的相互作用。</li>
+<li><b>Hierarchical 3D调控模型：</b>Chromoformer模型包含三个变体的自注意操作，以反映基因调控的三维层次。这意味着Chromoformer可以同时考虑位于启动子附近的表观基因组背景和远程调控的组蛋白修饰，从而实现更精确的基因表达预测。</li>
+</p>
+</div>
+<h2 id="模型结构">模型结构</h2>
+<div>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/Chromoformer_F1.png" alt="Chromoformer architecture">
+</div>
+</body>
+</html>]]></content>
+      <categories>
+        <category>Journal Club</category>
+      </categories>
+      <tags>
+        <tag>Deep learning</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>The 3D genomics</title>
     <url>/2023/08/08/The-3D-genomics/</url>
     <content><![CDATA[<!DOCTYPE html>
@@ -150,6 +208,43 @@
       </categories>
       <tags>
         <tag>Biology</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Specialized functions of cohesins STAG1 and STAG2 in 3D genome architecture</title>
+    <url>/2023/08/31/Specialized-functions-of-cohesins-STAG1-and-STAG2-in-3D-genome-architecture/</url>
+    <content><![CDATA[<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .image-text-container {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* 调整图片和文本之间的间距 */
+  }
+  .image-container {
+    flex: 1;
+  }
+  .text-container {
+    flex: 2;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  .blue{
+    color: #7EBCF2;
+  }
+</style>
+</head>
+<body>
+</body>
+</html>]]></content>
+      <categories>
+        <category>Journal Club</category>
+      </categories>
+      <tags>
+        <tag>Cohesin</tag>
       </tags>
   </entry>
   <entry>
