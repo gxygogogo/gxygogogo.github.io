@@ -59,6 +59,45 @@ Chromoformer的出现克服了之前方法的局限性：一方面：之前的�
       </tags>
   </entry>
   <entry>
+    <title>Specialized functions of cohesins STAG1 and STAG2 in 3D genome architecture</title>
+    <url>/2023/08/31/Specialized-functions-of-cohesins-STAG1-and-STAG2-in-3D-genome-architecture/</url>
+    <content><![CDATA[<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .image-text-container {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* 调整图片和文本之间的间距 */
+  }
+  .image-container {
+    flex: 1;
+  }
+  .text-container {
+    flex: 2;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  .blue{
+    color: #7EBCF2;
+  }
+</style>
+</head>
+<body>
+<h2 id="Cohesin-Introduction">Cohesin Introduction</h2>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/Cohesin_F1.png" alt="Cohesin introduction">
+</body>
+</html>]]></content>
+      <categories>
+        <category>Journal Club</category>
+      </categories>
+      <tags>
+        <tag>Cohesin</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>The 3D genomics</title>
     <url>/2023/08/08/The-3D-genomics/</url>
     <content><![CDATA[<!DOCTYPE html>
@@ -208,43 +247,6 @@ Chromoformer的出现克服了之前方法的局限性：一方面：之前的�
       </categories>
       <tags>
         <tag>Biology</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Specialized functions of cohesins STAG1 and STAG2 in 3D genome architecture</title>
-    <url>/2023/08/31/Specialized-functions-of-cohesins-STAG1-and-STAG2-in-3D-genome-architecture/</url>
-    <content><![CDATA[<!DOCTYPE html>
-<html>
-<head>
-<style>
-  .image-text-container {
-    display: flex;
-    align-items: center;
-    gap: 20px; /* 调整图片和文本之间的间距 */
-  }
-  .image-container {
-    flex: 1;
-  }
-  .text-container {
-    flex: 2;
-  }
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-  .blue{
-    color: #7EBCF2;
-  }
-</style>
-</head>
-<body>
-</body>
-</html>]]></content>
-      <categories>
-        <category>Journal Club</category>
-      </categories>
-      <tags>
-        <tag>Cohesin</tag>
       </tags>
   </entry>
   <entry>
