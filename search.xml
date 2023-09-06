@@ -45,10 +45,136 @@ Chromoformer的出现克服了之前方法的局限性：一方面：之前的�
 <li><b>Hierarchical 3D调控模型：</b>Chromoformer模型包含三个变体的自注意操作，以反映基因调控的三维层次。这意味着Chromoformer可以同时考虑位于启动子附近的表观基因组背景和远程调控的组蛋白修饰，从而实现更精确的基因表达预测。</li>
 </p>
 </div>
-<h2 id="模型结构">模型结构</h2>
+<h2 id="模型介绍">模型介绍</h2>
+<h3 id="模型结构">模型结构</h3>
 <div>
 <img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/Chromoformer_F1.png" alt="Chromoformer architecture">
+<b>Chromoformer模型概述：</b><br>
+<p>该模型包括三个独立的模块，每个模块接受不同分辨率(100bp, 500bp, 2000bp)的输入特征，并生成核心启动子的调控状态的嵌入向量。这三个调控嵌入向量最终被连接在一起，形成一个多尺度的调控嵌入向量(Multi-scale regulatory embedding vector)，然后传递到全连接层，用于预测基因的表达水平。</p>
+<p><b>Chromoformer两方面的设计原则：</b><br></p>
+<ol>
+<li>从核心启动子(Core promoter)处的组蛋白修饰信息中提取尽可能多的进程调控信息。</li>
+<li>同时考虑通过三维染色质互作传递到核心启动子的远程组蛋白修饰信息。</li>
+</ol>
+<p><b>Chromoformer研究将基因调控的概念分解为三个层面：</b><br></p>
+<ol>
+<li>核心启动子的顺式调控</li>
+<li>核心启动子与潜在的顺式调控元件(pCREs, putative cis-regulatory elements)的三维染色质相互作用</li>
+<li>由一组三维成对相互作用施加的集体效应</li>
+</ol>
+<p><b>图1B：</b>Chromoformer结构，三个独立模块用于生成基因表达调控的多尺度表征。每个模块都输入了不同分辨率的组蛋白修饰特征，已生成反映核心启动子调控状态的嵌入向量，然后将嵌入向量传递给全连接层进行基因表达的预测。<br>
+<b>图1C-E：</b>C-E是生成核心启动子调控状态的嵌入向量的完整Encoder结构；首先，Embedding transformer模块学习核心启动子附近直接作用的组蛋白修饰特征，生成一个固定大小的向量，使用transformer架构能够使模型在广泛的核心启动子组蛋白修饰上精确识别相关信号。然后，Pairwise Interaction transformer用于处理核心启动子与pCREs之间的成对顺式调控元件相互作用，与Embedding transformer使用的self-attention不同的是，这个模块使用了Encoder-Decoder层，以得到promoter-pCREs成对相互作用的嵌入向量。最后，Regulation transformer模块接受核心启动子嵌入向量和成对相互作用嵌入向量，这个模块使用gated self-attention来构建整个调控模型，同时使用标准化后的互作频率来调整模型中相互作用的优先级。</p>
 </div>
+<h3 id="模型数据">模型数据</h3>
+<div>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/Chromoformer_data.png" alt="Chromoformer data">
+</div>
+<h2 id="模型结果">模型结果</h2>
+<h3 id="Chromoformer变体及性能比较">Chromoformer变体及性能比较</h3>
+<div>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/chromoformer_variants.png" alt="Chromoformer variants">
+<b>Chromoformer-classifier(Chromoformer-clf)：</b>它拥有一个全连接层的分类头，生成一个二维表示高表达和 低表达的概率向量。<br>
+<b>Chromoformer-regression(Chromoformer-reg)：</b>预测基因的表达水平，生成基因的log2RPKM值。<br>
+Chromoformer for fold-change regression(Chromoformer-diff)：使用Siamese neural network结构接受两个不同细胞类型的组蛋白修饰信号，以预测不同细胞类型每个基因表达的log2FoldChange值。<br>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/Chromoformer_diff.png" alt="Chromoformer diff">
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/4f_cv.png" alt="Cross-validation">
+<p>通过四倍交叉验证发现，Chromoformer-clf，Chromoformer-reg，Chromoformer-diff性能均好于同类模型，可以很好的应用于表观基因组调控预测中。</p>
+</div>
+<h3 id="更大范围的bin和顺势调控关系能够提高Chromoformer的性能">更大范围的bin和顺势调控关系能够提高Chromoformer的性能</h3>
+<div>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/R3.png" alt="Chromoformer Result3">
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/S8.png" alt="Chromoformer Sup8">
+<b>图3a：</b>测试从TSS附近2Kb-40Kb范围内各个模型预测结果准确性的评估。可以发现Chromoformer在2Kb-40Kb的窗口范围内预测性能逐渐升高，并且一直显著高于其他模型，其余模型在10Kb处预测准确性开始下降。这是由于更大的范围能够包括其他无关的TSS，而这是因为每个基因组位置的attention score的计算是根 据全基因组背景计算得到的，没有考虑到目标TSS的绝对距离。在transformer架构中，通过位置编码的点积attention score计算不需要引入全局背景变量，因此可以计算任意距离对之间的attention score。<br>
+<b>图3b：</b>引入顺式调控元件能够有效地促进Chromoformer预测效能。<br>
+<b>图3c：</b>只提高模型复杂度和引入顺式调控元件互作关系均能提高模型预测的准确性。但是引入顺式调控元件之后，模型预测准确性提高更加显著。此外intra-TAD互作相较于inter-TAD互作更能提高Chromoformer预测性能。<br>
+</div>
+<h3 id="Chromoformer关注基因体上的远程转录延伸信号">Chromoformer关注基因体上的远程转录延伸信号</h3>
+<div>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/R4.png" alt="Chromoformer Result4">
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/S9.png" alt="Chromoformer Sup9">
+<p>通过Embedding transformer的attention head可视化发现，大多数attention head主要关注TSS下游4-6Kb位置，而不是像之前的认知一样，组蛋白修饰信息主要富集在TSS附近，转录因子结合转录起始位点主要在TSS附近(图4a,b,c)。同时发现H3K26me3在高/低表达的基因的TSS处没有差异，但在TSS下游4-6Kb处的差异十分明显，这表明H3K26me3主要标志转录活跃基因的基因体(图4b,d,e,f)。Embedding transformer针对高表达基因比低表达基因更关注TSS下游4-6Kb区域，并且H3K36me3对模型预测的准确性影响最大，可以认为是一个独立的因素(图g,h,sup9)。<b>Chromoformer模型通过Embedding transformer学习了组蛋白修饰在TSS附近的活跃转录与Gene body内高水平H3K26me3之间的远程相关性，并且也解释了为什么模型随着bin的范围增大而性能提高，即模型可以从Gene body内学习关于基因表达的特征。</b></p>
+</div>
+<h3 id="通过Chromoformer分析cis-regulome">通过Chromoformer分析cis-regulome</h3>
+<div>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/R5.png" alt="Chromoformer Result5">
+<p><b>Predicted cis-regulatory impact(PCRI)：</b>由Pairwise Interaction transformer和Regulation transformer生成interaction-aware的调控嵌入和由Embedding transformer生成的原始核心启动子嵌入之间的欧氏距离(图5a)。</p>
+<p><b>PCRI最终对预测结果概率的影响？</b>在预测的高/低基因集中计算每个基因的PCRI，将高于PCRI中位数的基因记为高表达基因，低于PCRI中位数的基因记为低表达基因。可以发现在高/低表达基因中根据PCRI划分的两组基因的Fold change表现是相反的(图5b)，同样高表达基因的Fold change和PCRI呈正相关，而低表达基因的Fold change和PCRI呈负相关(图5c)。PCRI的高低影响了基因表达的预测，高PCRI的高表达基因被预测为更高表达的基因，高PCRI的低表达基因被预测为更低表达的基因。</p>
+<p>从四倍交叉验证的每一次结果中抽取250个高表达搞PCRI的基因，共1000个基因。计算与这1000个基因有关的pCREs附近的组蛋白修饰信号。结果显示具有高表达高PCRI的基因的H3K29ac(enhancers)、H3K9ac(enhancers)、H3K4me1(enhancers)、H3K4me3(active promoter)、H3K9ac(active promoter)、H3K26me3(active gene bodys)的信号显著高于低表达高PCRI的信号值。同时低水平高表达的H3K27me3、H3K9me3这种转录抑制的信号值显著高于高水平高PCRI。这表明Chromoformer能够同时检测到激活和抑制性调控信息。</p>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/R6.png" alt="Chromoformer Result6">
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/S13.png" alt="Chromoformer Sup13">
+<p>进一步使用PCRI指标研究cis-regulation在不同细胞类型之间的差异情况。使用层次聚类发现健康干细胞和HepG2细胞能够聚在一起，并且在HepG2细胞中发现4个与HCC紧密相关的基因(<b>CCN2,GNA12,TRIB3,RBM39</b>)。并且这四个基因的表达量在HCC和健康干细胞中表达量也存在显著的差异。为了研究为什么Chromoformer会将这些基因的PCRI值预测的比较高？进一步研究CCN2基因周围的7种组蛋白修饰特征，研究发现了一个只有在HCC中活跃的潜在增强子区域(红色箭头处)，这可能是HCC中CCN2基因PCRI较高和表达量较高的原因。这部分结果表明Chromoformer具有预测恶心基因表达改变的表观基因组特征的能力。</p>
+</div>
+<h3 id="Chromoformer学习叠加式转录激活和多聚酶结合沉默">Chromoformer学习叠加式转录激活和多聚酶结合沉默</h3>
+<div>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/R7.png" alt="Chromoformer Result7">
+<p>在这一部分研究中发现PCRI与转录活性相关的pCREs数目呈正相关(图7a,b)，这表明Chromoformer可以学习pCRE在转录中对基因转录激活的累积动态。在这里使用Ploycomb群蛋白作为功能性抑制因子来研究；PRC2(polycomb repressive compex 2)包含四个核心亚基：SUZ12、EED、EZH2/EZH1、RBBP4。在这里使用亚基中的EZH2和SUZ12来确定与PRC2结合的沉默子的数量。研究发现PCRI与EZH2的pCREs数目呈logistic式的增加(图7c,d)，同时提出了一个关于沉默中心的新假设，即存在一定的沉默子局部浓度阈值，使PcG能够充分发挥其抑制功能(图7f)。但这尚未被实验验证，这足够说明Chromoformer在计算生物学领域推导新的定量假设方面的实用性。Chromoformer通过与增强子的相互作用来增强house keeping基因和特定于细胞类型的基因的表达，同时通过与PRC2结合的沉默子相互作用主要抑制发育性基因的表达。</p>
+</div>
+<h2 id="讨论">讨论</h2>
+<div>
+<p>Chromofomer定量建模组蛋白修饰编码在基因表达调控中的作用，通过捕获涉及核心启动子和pCREs的复杂层次的cis-regulation显著提高了基因表达预测的性能。Chromoformer能够捕捉基因组序列中的长距离调控关系，使其能够学习TSS处的组蛋白修饰与基因体内的组蛋白修饰之间的远程调控。Chromoformer使用transformer学习无序特征集中的成对相互作用，并使用实验测量的三维染色质相互作用来指导学习，使其能够学习组蛋白修饰信息如何通过三维染色质折叠从pCREs传递到核心启动子以调控基因表达，<b>并且也可以通过DNA结合蛋白来进行学习(转录因子，CTCF)。</b></p>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/R8.png" alt="Chromoformer Result8">
+<p>Chromoformer能够学习不同物种之间的组蛋白修饰信息的相似性，进行跨物种预测(图8a-c)。Chromoformer可以跨细胞类型预测，说明chromoformer在一种细胞类型中训练时，可以学习到其他细胞类型中相似的组蛋白修饰信息，细胞类型相似时，预测性能更高(图8d)。</p>
+<p>开发专门的深度学习框架，能够有效地嵌入生物学先验知识的重要性，不仅可以提高预测任务地性能，还可以定量地表征生物实体之间复杂的关系。</p>
+</div>
+<h2 id="模型流程">模型流程</h2>
+<h3 id="模型数据准备">模型数据准备</h3>
+<div>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/chromoformer_preparation.png" alt="Chromoformer data preparation">
+</div>
+<h3 id="安装">安装</h3>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install chromoformer</span><br></pre></td></tr></table></figure>
+<h3 id="训练">训练</h3>
+<p>训练Chromoformer-clf：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">python -m chromoformer.train --config config.yaml --meta metadata.csv --npy-dir npy_dir \</span></span><br><span class="line"><span class="language-bash">    --<span class="built_in">fold</span> 0 --binsizes 2000 500 100</span></span><br></pre></td></tr></table></figure>
+<p>训练Chromoformer-reg：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">python -m chromoformer.train --config config.yaml --meta metadata.csv --npy-dir npy_dir \</span></span><br><span class="line"><span class="language-bash">    --<span class="built_in">fold</span> 0 --binsizes 2000 500 100 --regression</span></span><br></pre></td></tr></table></figure>
+<h3 id="训练配置文件">训练配置文件</h3>
+<p>配置文件是<code>yaml</code>格式文件，包括配置参数(<code>configs/default.yaml</code>)。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">seed:</span> <span class="number">123</span></span><br><span class="line"><span class="comment"># biology</span></span><br><span class="line"><span class="attr">i_max:</span> <span class="number">8</span> <span class="comment"># maximum number of interacting genomic regions to consider</span></span><br><span class="line"><span class="attr">w_prom:</span> <span class="number">40000</span> <span class="comment"># window size around the core promoter</span></span><br><span class="line"><span class="attr">w_max:</span> <span class="number">40000</span> <span class="comment"># maximum window size for regions (promoter and pCREs)</span></span><br><span class="line"><span class="comment"># optimization</span></span><br><span class="line"><span class="attr">num_epoch:</span> <span class="number">10</span></span><br><span class="line"><span class="attr">lr:</span> <span class="number">3e-5</span></span><br><span class="line"><span class="attr">bsz:</span> <span class="number">64</span></span><br><span class="line"><span class="attr">gamma:</span> <span class="number">0.87</span></span><br><span class="line"><span class="comment"># model</span></span><br><span class="line"><span class="attr">n_feats:</span> <span class="number">7</span></span><br><span class="line"><span class="attr">embed:</span> <span class="comment"># Embedding transformer</span></span><br><span class="line">  <span class="attr">n_layers:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">n_heads:</span> <span class="number">2</span></span><br><span class="line">  <span class="attr">d_model:</span> <span class="number">128</span></span><br><span class="line">  <span class="attr">d_ff:</span> <span class="number">128</span></span><br><span class="line"><span class="attr">pairwise_interaction:</span> <span class="comment"># Pairwise Interaction transformer</span></span><br><span class="line">  <span class="attr">n_layers:</span> <span class="number">2</span></span><br><span class="line">  <span class="attr">n_heads:</span> <span class="number">2</span></span><br><span class="line">  <span class="attr">d_model:</span> <span class="number">128</span></span><br><span class="line">  <span class="attr">d_ff:</span> <span class="number">256</span></span><br><span class="line"><span class="attr">regulation:</span> <span class="comment"># Regulation transformer</span></span><br><span class="line">  <span class="attr">n_layers:</span> <span class="number">6</span></span><br><span class="line">  <span class="attr">n_heads:</span> <span class="number">8</span></span><br><span class="line">  <span class="attr">d_model:</span> <span class="number">256</span></span><br><span class="line">  <span class="attr">d_ff:</span> <span class="number">256</span></span><br><span class="line"><span class="attr">d_head:</span> <span class="number">128</span> <span class="comment"># inner dimension of the last fully-connected layer</span></span><br></pre></td></tr></table></figure>
+<h3 id="预训练权重">预训练权重</h3>
+<p><code>.pt</code>文件是基本上是字典结构。<br>
+<code>net</code>：预训练的权重<br>
+<code>optimizer</code>：model snapshot时的pytorch优化器的状态<br>
+<code>epoch</code>：model snapshot时的epoch<br>
+<code>last_val_loss</code>：Validation loss at the time of model snapshot<br>
+<code>last_val_auc</code>：Validation AUC at the time of model snapshot<br>
+<code>val_score</code>：Output probabilities for genes in validation set<br>
+<code>val_label</code>：True labels for genes in Validation set<br>
+使用fold 1训练集：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">ckpt = torch.load(<span class="string">&#x27;E003/chromoformer-reproduction-E003-conf1-fold1.pt&#x27;</span>, map_location=<span class="string">&#x27;cpu&#x27;</span>)</span><br><span class="line">pretrained_model_weights = ckpt[<span class="string">&#x27;net&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="Chromoformer-demo">Chromoformer demo</h3>
+<p>使用预训练的Chromoformer模型基于启动子和三维相关区域的组蛋白修饰信号预测特定的基因。</p>
+<h4 id="数据准备">数据准备</h4>
+<ol>
+<li>
+<p><b>Metadata</b><br>
+需要一个核心<code>metadata.csv</code>文件，其中包含独立实验验证的启动子，相关潜在的顺式调控区域(pCREs)，每一行代表一个基因，将会作为Chromoformer预测的单元。<br>
+<code>gene_id</code>：基因ID(e.g., ENSG00000162819)。<br>
+<code>eid</code>：Roadmap Epigenomics细胞类型的EID(e.g., E003)。<br>
+<code>label</code>：(仅训练必需)二进制标签，代表低(0)/高(1)表达。<br>
+<code>chrom,start,end,strand</code>：基因转录起始位点的基因组位置坐标(e.g., chr1,222885893,222885894,+)。<br>
+<code>split</code>：(仅训练必需)用于四倍交叉验证的拆分信息。<br>
+<code>neighbors</code>：与基因启动子相关的一系列pCREs，由分号(;)隔开(e.g., chr:222949655-222956850;chr1:223444669-223448287)。<br>
+<code>scores</code>：每个pCREs标准化后的互作频率，顺序和neighbors列相同(e.g., 1.849;1.5678)。<br>
+<img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/example.png" alt="Example"></p>
+</li>
+<li>
+<p><b>预训练的权重</b><br>
+使用十一种细胞类型进行预训练的权重集合在下面网址中获得：<a href="https://figshare.com/articles/dataset/Pretrained_Chromoformer_weights/19424807/1">https://figshare.com/articles/dataset/Pretrained_Chromoformer_weights/19424807/1</a></p>
+</li>
+<li>
+<p><b>Region-wise组蛋白修饰水平</b><br>
+详情在<code>模型数据准备</code>模块可见。</p>
+</li>
+</ol>
+<h4 id="进行预测">进行预测</h4>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">python run_demo.py -m demo_meta.csv -d demo_data -o demo_meta.predicted.csv \</span></span><br><span class="line"><span class="language-bash">    -w chromoformer-reproduction-E003-conf1-fold1.pt \</span></span><br></pre></td></tr></table></figure>
+<p>注意：<code>run_demo.py</code>需要GPU环境<br>
+<code>**run_demo.py**</code><strong>的参数：</strong><br>
+<code>-m, --meta</code>：meatadata csv文件的路径。<br>
+<code>-d, --npy-dir</code>：包含region-wise组蛋白修饰水平的.npy格式文件地址。<br>
+<code>-w, --weights</code>：预训练的Chromoformer权重的.pt格式文件地址。<br>
+<code>-o, --output</code>：有&quot;预测结果列&quot;的metadata文件。</p>
 </body>
 </html>]]></content>
       <categories>
@@ -87,7 +213,12 @@ Chromoformer的出现克服了之前方法的局限性：一方面：之前的�
 </head>
 <body>
 <h2 id="Cohesin-Introduction">Cohesin Introduction</h2>
+<div>
 <img src="https://cdn.jsdelivr.net/gh/gxygogogo/CDN/img/Cohesin_F1.png" alt="Cohesin introduction">
+<p>
+真核细胞中存在三种染色质结构维持蛋白复合物(SMC)：<b>Cohesin</b>, Condensin和SMC5/6复合物。Cohesin在细胞核内捕获DNA并参与多种DNA反应，其中最重要的是姐妹染色单体的黏附和三维基因组的组织。在脊椎动物体细胞中Cohesin存在两种复合物，都有共有的SMC1A, RAD21, SMC3；二者存在差异的地方在于STAG1和STAG2亚基(图1a)。STAG1和STAG2蛋白在中心区域具有同源性，但其在N-端和C-端区域有所不同(图1b)。Cohesin-STAG1和Cohesin-STAG2在细胞周期内具有类似的行为，部分原因是Cohesin辅助因子介导的，NIPBL对于DNA拓扑的捕获是必需的，同时能够激活Cohesin的ATP酶活性；PDS5和WAPL一起释放染色质中的Cohesin以维持Cohesin的动态行为。与Sororin（CDCA5）结合的PDS5通过对抗WAPL的活性，在DNA复制后稳定乙酰化的Cohesin，从而在姐妹染色单体分离前保护一小部分Cohesin(图1c)。对小鼠和人类细胞的分析揭示了Cohesin-STAG1和Cohesin-STAG2在端粒和着丝粒的粘附中分别发挥更为重要的作用。其他研究报道了Cohesin-STAG2对双链断裂的优先招募，以抑制附近的转录并允许适当的修复，以及它在复制叉进展中的要求[14]。两种复合物的相对丰度依赖于细胞类型，尽管在大多数情况下，STAG2比STAG1更丰富(图1d)。有趣的是，在试管中重新模拟早期多能性丧失时，Cohesin-STAG2的水平增加，如下文所述，这种变化与基因组架构的重组相关。目前对STAG基因在不同组织或发育阶段的表达调控知之甚少。
+</p>
+</div>
 </body>
 </html>]]></content>
       <categories>
